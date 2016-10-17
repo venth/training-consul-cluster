@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60 seconds" packageTrace="false" debug="false" >
+    <property resource="logback.properties" />
+
+    <appender name="async_console_appender" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>500</queueSize>
+        <includeCallerData>true</includeCallerData>
+        <appender name="console_appender" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${log_pattern}</pattern>
+            </encoder>
+        </appender>
+    </appender>
+
+
+    <!--LOGGERS-->
+
+    <root level="INFO">
+        <appender-ref ref="async_console_appender" />
+    </root>
+
+</configuration>
