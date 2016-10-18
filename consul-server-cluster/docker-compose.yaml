@@ -43,18 +43,3 @@ services:
     links:
       - consul-server-ui
     command: agent -node consul-server-2 -ui -server -datacenter local -client 0.0.0.0 -bootstrap-expect 3 -rejoin -retry-join consul-server-ui:8301 -config-file=/opt/consul/config/consul-server-config.json
-
-  consul-aware-service-agent:
-    container_name: consul-aware-service-agent
-    image: library/consul:0.7.0
-    volumes:
-          - ./config/agent-config:/opt/consul/config
-    ports:
-      - "6500:8500" # cli port
-      - "6600:8600" # dns port (tcp/udp)
-    # network_mode: host
-    depends_on:
-      - consul-server-ui
-    links:
-      - consul-server-ui
-    command: agent -node consul-aware-service-agent -datacenter local -client 0.0.0.0 -rejoin -retry-join consul-server-ui:8301 -config-file=/opt/consul/config/consul-agent-config.json
