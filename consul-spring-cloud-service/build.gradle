@@ -6,7 +6,6 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'pl.allegro.tech.build:axion-release-plugin:1.4.0'
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
@@ -16,7 +15,14 @@ apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'spring-boot'
-apply plugin: 'pl.allegro.tech.build.axion-release'
+
+repositories {
+    // Use 'jcenter' for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+    mavenCentral()
+}
+
 
 dependencyManagement {
     imports {
@@ -25,32 +31,18 @@ dependencyManagement {
 }
 
 description = """
-Provides additional serializers and deserializers for Jackson to easier usage lazy serialization and
-deserialization via iterators and stream
+
 """
 
 // Spock works with Java 1.5 and above
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-// In this section you declare where to find the dependencies of your project
-repositories {
-    // Use 'jcenter' for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
-    mavenCentral()
-}
-
-scmVersion {
-    tag {
-        prefix = 'version'
-    }
-}
-
 // In this section you declare the dependencies for your production and test code
 dependencies {
     compile 'org.springframework.cloud:spring-cloud-starter-config'
     compile 'org.springframework.cloud:spring-cloud-starter-consul-discovery'
+    compile 'org.springframework.cloud:spring-cloud-starter-ribbon'
 
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.21'

@@ -10,3 +10,6 @@ spring:
         healthCheckInterval: 15s
       instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
       tags: foo=bar, baz
+
+server:
+  port: 8090
