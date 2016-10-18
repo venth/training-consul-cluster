@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: consule-aware-service-consumer
+  cloud:
+    consul:
+      retry:
+        initialInterval: 1000
+        multiplier: 1.1
+        maxInterval: 2000
+        maxAttempts: 6
+      host: localhost
+      port: 5500
+      discovery:
+        healthCheckPath: /health
+        healthCheckInterval: 15s
+      instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+      tags: foo=bar, baz
+    config:
+      failFast: false
+      retry:
+        maxAttempts: 20
+        initialInterval: 3000
+
+server:
+  port: 8070

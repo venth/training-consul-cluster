@@ -16,4 +16,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'consul-spring-cloud-service'
+rootProject.name = 'consul-aware-service-consumer'

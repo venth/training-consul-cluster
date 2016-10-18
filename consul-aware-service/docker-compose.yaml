@@ -7,13 +7,9 @@ services:
     volumes:
           - ./config/agent-config:/opt/consul/config
     ports:
-      - "6301:8301" # serf gossip port (tcp/udp)
-      - "6302:8302" # serf gossip port (tcp/udp)
       - "6500:8500" # cli port
       - "6600:8600" # dns port (tcp/udp)
     # network_mode: host
-    extra_hosts:
-      - "consul-server-ui:192.168.1.102"
     command: agent -node consul-aware-service-agent -datacenter local -client 0.0.0.0 -rejoin -retry-join consul-server-ui:8301 -config-file=/opt/consul/config/consul-agent-config.json
     networks:
       - consul-server-cluster

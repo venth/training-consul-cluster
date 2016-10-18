@@ -1,1 +1,2 @@
-include 'consul-spring-cloud-service'
+include 'consul-aware-service'
+include 'consul-aware-service-consumer'

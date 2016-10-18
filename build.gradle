@@ -7,7 +7,6 @@ buildscript {
     }
 }
 
-
 apply plugin: 'idea'
 apply plugin: 'pl.allegro.tech.build.axion-release'
 
@@ -22,4 +21,34 @@ scmVersion {
     tag {
         prefix = 'version'
     }
+}
+
+task consulStart(dependsOn: ['consulStartServiceConsumerAgent', 'consulStartServiceAgent', 'consulStartCluster']) {
+}
+
+task consulStartCluster(type: Exec) {
+    commandLine 'docker-compose', '-f', './consul-server-cluster/docker-compose.yaml', 'up', '-d'
+}
+
+task consulStartServiceAgent(type: Exec, dependsOn: 'consulStartCluster') {
+    commandLine 'docker-compose', '-f', './consul-aware-service/docker-compose.yaml', 'up', '-d'
+}
+
+task consulStartServiceConsumerAgent(type: Exec, dependsOn: 'consulStartCluster') {
+    commandLine 'docker-compose', '-f', './consul-aware-service-consumer/docker-compose.yaml', 'up', '-d'
+}
+
+task consulStopCluster(type: Exec, dependsOn: ['consulStopServiceAgent', 'consulStopServiceConsumerAgent']) {
+    commandLine 'docker-compose', '-f', './consul-server-cluster/docker-compose.yaml', 'down'
+}
+
+task consulStopServiceAgent(type: Exec) {
+    commandLine 'docker-compose', '-f', './consul-aware-service/docker-compose.yaml', 'down'
+}
+
+task consulStopServiceConsumerAgent(type: Exec) {
+    commandLine 'docker-compose', '-f', './consul-aware-service-consumer/docker-compose.yaml', 'down'
+}
+
+task consulStop(dependsOn: ['consulStopServiceConsumerAgent', 'consulStopServiceAgent', 'consulStopCluster']) {
 }
