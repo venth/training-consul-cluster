@@ -5,37 +5,56 @@ services:
     container_name: consul-server-ui
     image: library/consul:0.7.0
     volumes:
-      - ./config:/opt/consul/config
+      - ./config/server-config:/opt/consul/config
     # network_mode: host
     ports:
       - "8300:8300" # rpc port
       - "8301:8301" # serf gossip port (tcp/udp)
       - "8302:8302" # serf gossip port (tcp/udp)
       - "8400:8400" # cli port
-      - "8500:8500" # cli port
+      - "8500:8500" # http port
       - "8600:8600" # dns port (tcp/udp)
-    command: agent -node consul-server-ui -ui -server -datacenter local -client 0.0.0.0 -bootstrap-expect 3 -config-file=/opt/consul/config/consul-server-config.json
+    command: agent -node consul-server-ui -ui -server -datacenter local -client 0.0.0.0 -bootstrap-expect 3 -rejoin -config-file=/opt/consul/config/consul-server-config.json
 
   consul-server-1:
     container_name: consul-server-1
     image: library/consul:0.7.0
     volumes:
-      - ./config:/opt/consul/config
+      - ./config/server-config:/opt/consul/config
+    ports:
+      - "7500:8500" # http port
     # network_mode: host
     depends_on: 
       - consul-server-ui
     links:
       - consul-server-ui
-    command: agent -node consul-server-1 -server -datacenter local -client 0.0.0.0 -bootstrap-expect 3 -retry-join consul-server-ui:8301 -config-file=/opt/consul/config/consul-server-config.json
+    command: agent -node consul-server-1 -ui -server -datacenter local -client 0.0.0.0 -bootstrap-expect 3 -rejoin -retry-join consul-server-ui:8301 -config-file=/opt/consul/config/consul-server-config.json
 
   consul-server-2:
     container_name: consul-server-2
     image: library/consul:0.7.0
     volumes:
-      - ./config:/opt/consul/config
+      - ./config/server-config:/opt/consul/config
+    ports:
+      - "9500:8500" # http port
     # network_mode: host
     depends_on: 
       - consul-server-ui
     links:
       - consul-server-ui
-    command: agent -node consul-server-2 -server -datacenter local -client 0.0.0.0 -bootstrap-expect 3 -retry-join consul-server-ui:8301 -config-file=/opt/consul/config/consul-server-config.json
+    command: agent -node consul-server-2 -ui -server -datacenter local -client 0.0.0.0 -bootstrap-expect 3 -rejoin -retry-join consul-server-ui:8301 -config-file=/opt/consul/config/consul-server-config.json
+
+  consul-aware-service-agent:
+    container_name: consul-aware-service-agent
+    image: library/consul:0.7.0
+    volumes:
+          - ./config/agent-config:/opt/consul/config
+    ports:
+      - "6500:8500" # cli port
+      - "6600:8600" # dns port (tcp/udp)
+    # network_mode: host
+    depends_on:
+      - consul-server-ui
+    links:
+      - consul-server-ui
+    command: agent -node consul-aware-service-agent -datacenter local -client 0.0.0.0 -rejoin -retry-join consul-server-ui:8301 -config-file=/opt/consul/config/consul-agent-config.json

@@ -1,0 +1,11 @@
+{
+  "log_level": "INFO",
+  "node_name": "foobar",
+  "server": true,
+  "disable_update_check": true,
+  "dns_config": {
+    "allow_stale": true,
+    "max_stale": "3s"
+  },
+  "leave_on_terminate": true
+}
