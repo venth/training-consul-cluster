@@ -23,11 +23,11 @@ Consul http console is exposed on urls as follows:
 
 Consul service aware provides following services:
 * http://localhost:8090/health - for health check purposes
-* http://localhost:8090/home - returns always Hellow World
+* http://localhost:8090/home - returns always Hello World
 
 Consul service aware consumer provides following services:
-* http://localhost:8090/health - for health check purposes
-* http://localhost:8090/called - calls Consul service aware home service, in case the service in unavailable return Service Unavailable
+* http://localhost:8070/health - for health check purposes
+* http://localhost:8070/called - calls Consul service aware home service, in case the service in unavailable return Service Unavailable
 
 ## Consul on AWS
 
